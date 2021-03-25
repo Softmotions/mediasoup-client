@@ -1,5 +1,5 @@
 {
-  "name": "mediasoup-client",
+  "name": "@softmotions/mediasoup-client",
   "version": "3.6.29",
   "description": "mediasoup client side JavaScript library",
   "contributors": [
