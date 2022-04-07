@@ -1,6 +1,6 @@
 {
   "name": "@softmotions/mediasoup-client",
-  "version": "3.6.29",
+  "version": "3.6.51",
   "description": "mediasoup client side JavaScript library",
   "contributors": [
     "Iñaki Baz Castillo <ibc@aliax.net> (https://inakibaz.me)",
@@ -26,7 +26,8 @@
     "typescript:watch": "node npm-scripts.js typescript:watch",
     "lint": "node npm-scripts.js lint",
     "test": "node npm-scripts.js test",
-    "coverage": "node npm-scripts.js coverage"
+    "coverage": "node npm-scripts.js coverage",
+    "release": "node npm-scripts.js release"
   },
   "jest": {
     "verbose": true,
@@ -34,29 +35,29 @@
     "testRegex": "test/test.*\\.js"
   },
   "dependencies": {
-    "@types/debug": "^4.1.5",
+    "@types/debug": "^4.1.7",
     "@types/events": "^3.0.0",
     "awaitqueue": "^2.3.3",
     "bowser": "^2.11.0",
-    "debug": "^4.3.1",
+    "debug": "^4.3.3",
     "events": "^3.3.0",
+    "fake-mediastreamtrack": "^1.1.6",
     "h264-profile-level-id": "^1.0.1",
     "sdp-transform": "^2.14.1",
-    "supports-color": "^8.1.1"
+    "supports-color": "^9.2.1"
   },
   "devDependencies": {
-    "@types/sdp-transform": "^2.4.4",
+    "@types/sdp-transform": "^2.4.5",
     "@types/uuid": "^3.4.9",
-    "@typescript-eslint/eslint-plugin": "^4.16.1",
-    "@typescript-eslint/parser": "^4.16.1",
-    "eslint": "^7.21.0",
-    "eslint-plugin-jest": "^24.1.5",
-    "fake-mediastreamtrack": "^1.1.6",
-    "jest": "^26.6.3",
+    "@typescript-eslint/eslint-plugin": "^5.9.1",
+    "@typescript-eslint/parser": "^5.9.1",
+    "eslint": "^8.6.0",
+    "eslint-plugin-jest": "^25.3.4",
+    "jest": "^27.4.7",
     "jest-tobetype": "^1.2.3",
-    "open-cli": "^6.0.1",
-    "tsc-watch": "^4.2.9",
-    "typescript": "^3.8",
+    "open-cli": "^7.0.1",
+    "tsc-watch": "^4.6.0",
+    "typescript": "^4.5.4",
     "uuid": "^3.4.0"
   }
 }

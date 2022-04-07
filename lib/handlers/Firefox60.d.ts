@@ -32,9 +32,11 @@ export declare class Firefox60 extends HandlerInterface {
     setMaxSpatialLayer(localId: string, spatialLayer: number): Promise<void>;
     setRtpEncodingParameters(localId: string, params: any): Promise<void>;
     getSenderStats(localId: string): Promise<RTCStatsReport>;
-    sendDataChannel({ ordered, maxPacketLifeTime, maxRetransmits, label, protocol, priority }: HandlerSendDataChannelOptions): Promise<HandlerSendDataChannelResult>;
-    receive({ trackId, kind, rtpParameters }: HandlerReceiveOptions): Promise<HandlerReceiveResult>;
+    sendDataChannel({ ordered, maxPacketLifeTime, maxRetransmits, label, protocol }: HandlerSendDataChannelOptions): Promise<HandlerSendDataChannelResult>;
+    receive(optionsList: HandlerReceiveOptions[]): Promise<HandlerReceiveResult[]>;
     stopReceiving(localId: string): Promise<void>;
+    pauseReceiving(localIds: string[]): Promise<void>;
+    resumeReceiving(localIds: string[]): Promise<void>;
     getReceiverStats(localId: string): Promise<RTCStatsReport>;
     receiveDataChannel({ sctpStreamParameters, label, protocol }: HandlerReceiveDataChannelOptions): Promise<HandlerReceiveDataChannelResult>;
     private _setupTransport;

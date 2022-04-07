@@ -167,11 +167,8 @@ export function validateRtpHeaderExtension(ext: RtpHeaderExtension): void
 	if (typeof ext !== 'object')
 		throw new TypeError('ext is not an object');
 
-	// kind is optional. If unset set it to an empty string.
-	if (!ext.kind || typeof ext.kind !== 'string')
-		ext.kind = '';
-
-	if (ext.kind !== '' && ext.kind !== 'audio' && ext.kind !== 'video')
+	// kind is mandatory.
+	if (ext.kind !== 'audio' && ext.kind !== 'video')
 		throw new TypeError('invalid ext.kind');
 
 	// uri is mandatory.
@@ -541,10 +538,6 @@ export function validateSctpStreamParameters(params: SctpStreamParameters): void
 	{
 		params.ordered = false;
 	}
-
-	// priority is optional.
-	if (params.priority && typeof params.priority !== 'string')
-		throw new TypeError('invalid params.priority');
 
 	// label is optional.
 	if (params.label && typeof params.label !== 'string')
@@ -1080,15 +1073,14 @@ function matchCodecs(
 	{
 		case 'video/h264':
 		{
-			const aPacketizationMode = aCodec.parameters['packetization-mode'] || 0;
-			const bPacketizationMode = bCodec.parameters['packetization-mode'] || 0;
-
-			if (aPacketizationMode !== bPacketizationMode)
-				return false;
-
-			// If strict matching check profile-level-id.
 			if (strict)
 			{
+				const aPacketizationMode = aCodec.parameters['packetization-mode'] || 0;
+				const bPacketizationMode = bCodec.parameters['packetization-mode'] || 0;
+
+				if (aPacketizationMode !== bPacketizationMode)
+					return false;
+
 				if (!h264.isSameProfile(aCodec.parameters, bCodec.parameters))
 					return false;
 
@@ -1124,7 +1116,6 @@ function matchCodecs(
 
 		case 'video/vp9':
 		{
-			// If strict matching check profile-id.
 			if (strict)
 			{
 				const aProfileId = aCodec.parameters['profile-id'] || 0;

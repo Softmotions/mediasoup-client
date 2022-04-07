@@ -65,7 +65,7 @@ export declare type IceCandidate = {
      */
     port: number;
     /**
-     * The type of candidate..
+     * The type of candidate.
      */
     type: 'host' | 'srflx' | 'prflx' | 'relay';
     /**
@@ -75,11 +75,11 @@ export declare type IceCandidate = {
 };
 export declare type DtlsParameters = {
     /**
-     * DTLS role. Default 'auto'.
+     * Server DTLS role. Default 'auto'.
      */
     role?: DtlsRole;
     /**
-     * DTLS fingerprints.
+     * Server DTLS fingerprints.
      */
     fingerprints: DtlsFingerprint[];
 };
@@ -116,6 +116,12 @@ export declare class Transport extends EnhancedEventEmitter {
     private readonly _dataConsumers;
     private _probatorConsumerCreated;
     private readonly _awaitQueue;
+    private _pendingConsumerTasks;
+    private _consumerCreationInProgress;
+    private _pendingPauseConsumers;
+    private _consumerPauseInProgress;
+    private _pendingResumeConsumers;
+    private _consumerResumeInProgress;
     protected readonly _observer: EnhancedEventEmitter;
     /**
      * @emits connect - (transportLocalParameters: any, callback: Function, errback: Function)
@@ -195,11 +201,14 @@ export declare class Transport extends EnhancedEventEmitter {
     /**
      * Create a DataProducer
      */
-    produceData({ ordered, maxPacketLifeTime, maxRetransmits, priority, label, protocol, appData }?: DataProducerOptions): Promise<DataProducer>;
+    produceData({ ordered, maxPacketLifeTime, maxRetransmits, label, protocol, appData }?: DataProducerOptions): Promise<DataProducer>;
     /**
      * Create a DataConsumer
      */
     consumeData({ id, dataProducerId, sctpStreamParameters, label, protocol, appData }: DataConsumerOptions): Promise<DataConsumer>;
+    _createPendingConsumers(): Promise<void>;
+    _pausePendingConsumers(): void;
+    _resumePendingConsumers(): void;
     _handleHandler(): void;
     _handleProducer(producer: Producer): void;
     _handleConsumer(consumer: Consumer): void;

@@ -31,7 +31,6 @@ class FakeDataChannel extends EnhancedEventEmitter
 	ordered?: boolean;
 	maxPacketLifeTime?: number;
 	maxRetransmits?: number;
-	priority?: RTCPriorityType;
 	label?: string;
 	protocol?: string;
 
@@ -41,7 +40,6 @@ class FakeDataChannel extends EnhancedEventEmitter
 			ordered,
 			maxPacketLifeTime,
 			maxRetransmits,
-			priority,
 			label,
 			protocol
 		}: {
@@ -49,7 +47,6 @@ class FakeDataChannel extends EnhancedEventEmitter
 			ordered?: boolean;
 			maxPacketLifeTime?: number;
 			maxRetransmits?: number;
-			priority?: RTCPriorityType;
 			label?: string;
 			protocol?: string;
 		})
@@ -60,7 +57,6 @@ class FakeDataChannel extends EnhancedEventEmitter
 		this.ordered= ordered;
 		this.maxPacketLifeTime = maxPacketLifeTime;
 		this.maxRetransmits = maxRetransmits;
-		this.priority = priority;
 		this.label = label;
 		this.protocol = protocol;
 	}
@@ -296,8 +292,7 @@ export class FakeHandler extends HandlerInterface
 			maxPacketLifeTime,
 			maxRetransmits,
 			label,
-			protocol,
-			priority
+			protocol
 		}: HandlerSendDataChannelOptions
 	): Promise<HandlerSendDataChannelResult>
 	{
@@ -312,7 +307,6 @@ export class FakeHandler extends HandlerInterface
 				ordered,
 				maxPacketLifeTime,
 				maxRetransmits,
-				priority,
 				label,
 				protocol
 			});
@@ -330,21 +324,29 @@ export class FakeHandler extends HandlerInterface
 	}
 
 	async receive(
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		{ trackId, kind, rtpParameters }: HandlerReceiveOptions
-	): Promise<HandlerReceiveResult>
+		optionsList: HandlerReceiveOptions[]
+	) : Promise<HandlerReceiveResult[]>
 	{
-		if (!this._transportReady)
-			await this._setupTransport({ localDtlsRole: 'client' });
+		const results: HandlerReceiveResult[] = [];
 
-		logger.debug('receive() [trackId:%s, kind:%s]', trackId, kind);
+		for (const options of optionsList)
+		{
+			const { trackId, kind } = options;
 
-		const localId = this._nextLocalId++;
-		const track = new FakeMediaStreamTrack({ kind });
+			if (!this._transportReady)
+				await this._setupTransport({ localDtlsRole: 'client' });
 
-		this._tracks.set(localId, track);
+			logger.debug('receive() [trackId:%s, kind:%s]', trackId, kind);
 
-		return { localId: String(localId), track };
+			const localId = this._nextLocalId++;
+			const track = new FakeMediaStreamTrack({ kind });
+
+			this._tracks.set(localId, track);
+
+			results.push({ localId: String(localId), track });
+		}
+
+		return results;
 	}
 
 	async stopReceiving(localId: string): Promise<void>
@@ -352,6 +354,20 @@ export class FakeHandler extends HandlerInterface
 		logger.debug('stopReceiving() [localId:%s]', localId);
 
 		this._tracks.delete(Number(localId));
+	}
+
+	async pauseReceiving(
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		localIds: string[]): Promise<void>
+	{
+		// Unimplemented.
+	}
+
+	async resumeReceiving(
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		localIds: string[]): Promise<void>
+	{
+		// Unimplemented.
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
